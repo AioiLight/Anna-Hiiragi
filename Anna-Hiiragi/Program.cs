@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Anna_Hiiragi
+namespace AioiLight.Anna_Hiiragi
 {
     class Program
     {
