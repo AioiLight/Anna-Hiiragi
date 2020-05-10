@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using AngleSharp.Html;
 using AngleSharp.Html.Parser;
 using Discord;
@@ -50,6 +51,47 @@ namespace AioiLight.Anna_Hiiragi
         static async Task Client_MessageReceived(SocketMessage arg)
         {
             var server = (arg.Channel as SocketGuildChannel).Guild;
+
+            {
+                var hasConfig = Config.Servers.Where(s => s.ServerID == server.Id);
+                if (hasConfig.Any())
+                {
+                    var cfg = hasConfig.First();
+                    if (arg.Channel.Id == cfg.WatchChannel)
+                    {
+                        try
+                        {
+                            var response = await Client.GetAsync(arg.Content);
+                            response.EnsureSuccessStatusCode();
+                            var responseBody = await response.Content.ReadAsStringAsync();
+
+                            var parser = new HtmlParser();
+                            var document = await parser.ParseDocumentAsync(responseBody);
+
+                            var h1 = document.GetElementsByTagName("h1");
+                            var title = h1.Last().TextContent.Trim();
+
+                            var monster = new Monster[] { cfg.ClanBattle[0], cfg.ClanBattle[1], cfg.ClanBattle[2], cfg.ClanBattle[3], cfg.ClanBattle[4] };
+
+                            var match = monster.Where(m => m.Hook.Where(h => title.Contains(h)).Any());
+
+                            if (match.Any())
+                            {
+                                var result = match.First();
+
+                                var channel = server.GetChannel(result.ChannelID) as ISocketMessageChannel;
+
+                                await  channel.SendMessageAsync(arg.Content);
+                                return;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
 
             if (arg.Content.StartsWith("!anna init"))
             {
@@ -145,9 +187,55 @@ namespace AioiLight.Anna_Hiiragi
                             catch (Exception e)
                             {
                                 await arg.Channel.SendMessageAsync($"動画の解析ができませんでした……。\n" +
-                                    $"URL: <{param[1]}>");
+                                    $"URL: <{param[1]}>\n" +
+                                    $"エラー: {e.Message}");
                                 return;
                             }
+                        }
+                    }
+                    else if (param[0] == "watch")
+                    {
+                        if (param.Count() >= 2)
+                        {
+                            var ch = server.Channels.Where(ch => ch.Id == Convert.ToUInt64(param[1]));
+                            if (ch.Any())
+                            {
+                                cfg.WatchChannel = Convert.ToUInt64(ch.First().Id);
+                                await arg.Channel.SendMessageAsync($"動画を監視するチャンネルを <#{ch.First().Id}> に設定しました。");
+                                return;
+                            }
+                            else
+                            {
+                                await arg.Channel.SendMessageAsync($"エラー: チャンネルが存在しません。");
+                                return;
+                            }
+                        }
+                    }
+                    else if (param[0] == "setch")
+                    {
+                        if (param.Count() >= 3)
+                        {
+                            var ch = server.Channels.Where(ch => ch.Id == Convert.ToUInt64(param[2]));
+                            if (ch.Any())
+                            {
+                                cfg.ClanBattle[Convert.ToInt32(param[1]) - 1].ChannelID = Convert.ToUInt64(ch.First().Id);
+                                await arg.Channel.SendMessageAsync($"クランバトル{param[1]}体目の動画を送信するチャンネルを <#{ch.First().Id}> に設定しました。");
+                                return;
+                            }
+                            else
+                            {
+                                await arg.Channel.SendMessageAsync($"エラー: チャンネルが存在しません。");
+                                return;
+                            }
+                        }
+                    }
+                    else if (param[0] == "name")
+                    {
+                        if (param.Count() >= 3)
+                        {
+                            cfg.ClanBattle[Convert.ToInt32(param[1]) - 1].Hook = param[2].Split(',');
+                            await arg.Channel.SendMessageAsync($"クランバトル{param[1]}体目の名前を {string.Join('/', param[2].Split(','))} に設定しました。");
+                            return;
                         }
                     }
                     else if (param[0] == "save")

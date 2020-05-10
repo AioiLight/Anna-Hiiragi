@@ -9,7 +9,7 @@
 
         public ulong ServerID { get; set; }
         public ulong UserRole { get; set; }
-        public string WatchChannel { get; set; }
+        public ulong WatchChannel { get; set; }
         public ClanBattle ClanBattle { get; set; }
     }
 }
