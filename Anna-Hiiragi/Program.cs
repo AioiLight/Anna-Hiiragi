@@ -4,8 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Timers;
-using AngleSharp.Html;
 using AngleSharp.Html.Parser;
 using Discord;
 using Discord.WebSocket;
