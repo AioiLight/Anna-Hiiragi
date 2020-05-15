@@ -195,7 +195,7 @@ namespace AioiLight.Anna_Hiiragi
                     {
                         if (param.Count() >= 2)
                         {
-                            var ch = server.Channels.Where(ch => ch.Id == Convert.ToUInt64(param[1]));
+                            var ch = server.Channels.Where(c => c.Id == Convert.ToUInt64(param[1]));
                             if (ch.Any())
                             {
                                 cfg.WatchChannel = Convert.ToUInt64(ch.First().Id);
@@ -213,7 +213,7 @@ namespace AioiLight.Anna_Hiiragi
                     {
                         if (param.Count() >= 3)
                         {
-                            var ch = server.Channels.Where(ch => ch.Id == Convert.ToUInt64(param[2]));
+                            var ch = server.Channels.Where(c => c.Id == Convert.ToUInt64(param[2]));
                             if (ch.Any())
                             {
                                 cfg.ClanBattle[Convert.ToInt32(param[1]) - 1].ChannelID = Convert.ToUInt64(ch.First().Id);
@@ -232,7 +232,7 @@ namespace AioiLight.Anna_Hiiragi
                         if (param.Count() >= 3)
                         {
                             cfg.ClanBattle[Convert.ToInt32(param[1]) - 1].Hook = param[2].Split(',');
-                            await arg.Channel.SendMessageAsync($"クランバトル{param[1]}体目の名前を {string.Join('/', param[2].Split(','))} に設定しました。");
+                            await arg.Channel.SendMessageAsync($"クランバトル{param[1]}体目の名前を {string.Join("/", param[2].Split(','))} に設定しました。");
                             return;
                         }
                     }
