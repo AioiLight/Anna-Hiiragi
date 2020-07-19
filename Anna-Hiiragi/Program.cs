@@ -223,8 +223,11 @@ namespace AioiLight.Anna_Hiiragi
                                 }
                                 else
                                 {
-                                    cfg.ClanBattle.Auto.ChannelID = Convert.ToUInt64(ch.First().Id);
-                                    await arg.Channel.SendMessageAsync($"クランバトル オート動画を送信するチャンネルを <#{ch.First().Id}> に設定しました。");
+                                    if (param[1].Equals("auto"))
+                                    {
+                                        cfg.ClanBattle.Auto.ChannelID = Convert.ToUInt64(ch.First().Id);
+                                        await arg.Channel.SendMessageAsync($"クランバトル オート動画を送信するチャンネルを <#{ch.First().Id}> に設定しました。");
+                                    }
                                 }
                                 return;
                             }
@@ -241,10 +244,17 @@ namespace AioiLight.Anna_Hiiragi
                         {
                             if (int.TryParse(param[1], out var result))
                             {
-
+                                cfg.ClanBattle[result - 1].Hook = param[2].Split(',');
+                                await arg.Channel.SendMessageAsync($"クランバトル{param[1]}体目の名前を {string.Join("/", param[2].Split(','))} に設定しました。");
                             }
-                            cfg.ClanBattle[Convert.ToInt32(param[1]) - 1].Hook = param[2].Split(',');
-                            await arg.Channel.SendMessageAsync($"クランバトル{param[1]}体目の名前を {string.Join("/", param[2].Split(','))} に設定しました。");
+                            else
+                            {
+                                if (param[1].Equals("auto"))
+                                {
+                                    cfg.ClanBattle.Auto.Hook = param[2].Split(',');
+                                    await arg.Channel.SendMessageAsync($"クランバトル オートのフックを {string.Join("/", param[2].Split(','))} に設定しました。");
+                                }
+                            }
                             return;
                         }
                     }
