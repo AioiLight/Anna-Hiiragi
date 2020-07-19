@@ -216,8 +216,16 @@ namespace AioiLight.Anna_Hiiragi
                             var ch = server.Channels.Where(c => c.Id == Convert.ToUInt64(param[2]));
                             if (ch.Any())
                             {
-                                cfg.ClanBattle[Convert.ToInt32(param[1]) - 1].ChannelID = Convert.ToUInt64(ch.First().Id);
-                                await arg.Channel.SendMessageAsync($"クランバトル{param[1]}体目の動画を送信するチャンネルを <#{ch.First().Id}> に設定しました。");
+                                if (int.TryParse(param[1], out var result))
+                                {
+                                    cfg.ClanBattle[result - 1].ChannelID = Convert.ToUInt64(ch.First().Id);
+                                    await arg.Channel.SendMessageAsync($"クランバトル{param[1]}体目の動画を送信するチャンネルを <#{ch.First().Id}> に設定しました。");
+                                }
+                                else
+                                {
+                                    cfg.ClanBattle.Auto.ChannelID = Convert.ToUInt64(ch.First().Id);
+                                    await arg.Channel.SendMessageAsync($"クランバトル オート動画を送信するチャンネルを <#{ch.First().Id}> に設定しました。");
+                                }
                                 return;
                             }
                             else
@@ -231,6 +239,10 @@ namespace AioiLight.Anna_Hiiragi
                     {
                         if (param.Count() >= 3)
                         {
+                            if (int.TryParse(param[1], out var result))
+                            {
+
+                            }
                             cfg.ClanBattle[Convert.ToInt32(param[1]) - 1].Hook = param[2].Split(',');
                             await arg.Channel.SendMessageAsync($"クランバトル{param[1]}体目の名前を {string.Join("/", param[2].Split(','))} に設定しました。");
                             return;

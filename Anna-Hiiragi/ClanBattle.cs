@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AioiLight.Anna_Hiiragi
+﻿namespace AioiLight.Anna_Hiiragi
 {
     public class ClanBattle
     {
@@ -13,6 +9,7 @@ namespace AioiLight.Anna_Hiiragi
             Monster3 = new Monster();
             Monster4 = new Monster();
             Monster5 = new Monster();
+            Auto = new Monster();
         }
 
         public Monster Monster1 { get; set; }
@@ -20,6 +17,7 @@ namespace AioiLight.Anna_Hiiragi
         public Monster Monster3 { get; set; }
         public Monster Monster4 { get; set; }
         public Monster Monster5 { get; set; }
+        public Monster Auto { get; }
 
         public Monster this[int index]
         {
