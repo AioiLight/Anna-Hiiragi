@@ -17,6 +17,8 @@ Anna-Hiiragi (ひーらぎあんな)は、プリンセスコネクト！Re:Dive�
 | ``!anna reset`` | そのサーバーでひーらぎあんなを使えなくする。|
 | ``!anna watch <chID>`` | YouTubeの動画を監視するチャンネルを設定する。 |
 | ``!anna setch <num> <chID>`` | ``<num>``番目のモンスターの割り振り先を設定する。 |
+| ``!anna setch auto <chID>`` | オート動画の割り振り先を設定する。 |
 | ``!anna name <num> <names>`` | ``<num>``番目のモンスターの名前を設定する。``<names>``は半角カンマ``,``で区切って複数指定できる。 |
+| ``!anna name auto <names>`` | オート動画のフックに使用する名前を設定する。``<names>``は半角カンマ``,``で区切って複数指定できる。 |
 | ``!anna test <youtubeURL>`` | テスト用コマンド。 |
 | ``!anna save`` | 設定を保存する。 |
