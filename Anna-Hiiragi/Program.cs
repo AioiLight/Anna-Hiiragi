@@ -66,8 +66,7 @@ namespace AioiLight.Anna_Hiiragi
                             var parser = new HtmlParser();
                             var document = await parser.ParseDocumentAsync(responseBody);
 
-                            var h1 = document.GetElementsByTagName("h1");
-                            var title = h1.Last().TextContent.Trim();
+                            var title = document.Title;
 
                             var monster = new Monster[] { cfg.ClanBattle[0], cfg.ClanBattle[1], cfg.ClanBattle[2], cfg.ClanBattle[3], cfg.ClanBattle[4] };
 
